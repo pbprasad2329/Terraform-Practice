@@ -1,51 +1,35 @@
 pipeline {
     agent any
 
-    environment {
-        AWS_REGION = 'ap-south-1'  // Set your desired AWS region
-        S3_BUCKET_NAME = 'my-terraform-state-bucket'  // Set the name of your Terraform state bucket
-    }
-
     stages {
         stage('SCM Checkout') {
             steps {
-                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/pbprasad2329/Terraform-Practice.git']])
-            }
-        }
-
-        stage("Create S3 Bucket") {
-            steps {
                 script {
-                    def s3BucketExists = sh(
-                        script: "aws s3 ls s3://${env.S3_BUCKET_NAME}",
-                        returnStatus: true
-                    )
-                    
-                    if (s3BucketExists != 0) {
-                        echo "Creating S3 bucket..."
-                        sh "aws s3api create-bucket --bucket ${env.S3_BUCKET_NAME} --region ${env.AWS_REGION}"
-                    } else {
-                        echo "S3 bucket ${env.S3_BUCKET_NAME} already exists."
-                    }
+                    // Checkout the code from the Git repository
+                    checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/shaik-karimulla-001/Terraform-Practice.git']])
                 }
             }
         }
-        
-        stage ("init") {
+
+        stage("Terraform Init") {
             steps {
-                sh "terraform init -reconfigure -backend-config='bucket=${env.S3_BUCKET_NAME}' -backend-config='key=terraform.tfstate' -backend-config='region=${env.AWS_REGION}'"
+                // Initialize Terraform with reconfiguration
+                sh "terraform init -reconfigure"
             }
         }
-        
-        stage ("plan") {
+
+        stage("Terraform Plan") {
             steps {
+                // Run Terraform plan
                 sh "terraform plan"
             }
         }
 
-        stage ("apply") {
+        stage("Terraform Action") {
             steps {
-                sh "terraform apply --auto-approve"
+                echo "Terraform action is --> ${action}"
+                // Run Terraform with the specified action (apply/destroy/etc.)
+                sh "terraform ${action} -lock=false --auto-approve"
             }
         }
     }
