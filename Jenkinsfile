@@ -50,11 +50,3 @@ pipeline {
         }
     }
 }
-ion is --> ${branch}"
-                sh ("terraform ${branch} --auto-approve")
-            }   
-
-        }
-
-    }
-}
