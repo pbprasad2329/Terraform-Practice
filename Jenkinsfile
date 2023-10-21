@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        AWS_REGION = 'us-east-1'  // Set your desired AWS region
+        AWS_REGION = 'ap-south-1'  // Set your desired AWS region
         S3_BUCKET_NAME = 'my-terraform-state-bucket'  // Set the name of your Terraform state bucket
     }
 
