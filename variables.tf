@@ -39,7 +39,7 @@ variable "acl" {
 variable "bucket_prefix" {
  type        = string
  description = "(required since we are not using 'bucket') Creates a unique bucket name beginning with the specified prefix"
- default     = "my-ddrs-bucket"
+ default     = "my-prasad2329-bucket"
 }
 variable "tags" {
  type        = map
