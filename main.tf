@@ -16,8 +16,8 @@ resource "aws_security_group" "jenkins-sg-2022" {
   description = "security group for Ec2 instance"
 
   ingress {
-    from_port   = 8080
-    to_port     = 8080
+    from_port   = 8081
+    to_port     = 8081
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
